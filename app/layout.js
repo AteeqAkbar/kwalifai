@@ -2,7 +2,7 @@
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { AuthContextProvider } from "@/context/AuthContext";
+import { ClerkProvider } from "@clerk/nextjs";
 
 // export const metadata = {
 //   title: "LeapTalent - Find Your Dream Job",
@@ -13,11 +13,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
-        <AuthContextProvider>
+        <ClerkProvider>
           <Header />
           <main className="min-h-screen">{children}</main>
           <Footer />
-        </AuthContextProvider>
+        </ClerkProvider>
       </body>
     </html>
   );
