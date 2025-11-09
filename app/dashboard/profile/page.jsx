@@ -52,12 +52,14 @@ export default function ProfilePage() {
         );
       }
 
+      console.log(payload, "pa");
       const isUpdate = !!user?.profile;
       const finalPayload = { ...payload, email: emailResolved };
 
       // Use PUT to update if a profile already exists, otherwise POST to create
-      const method = isUpdate ? "PUT" : "POST";
-      const endpoint = isUpdate ? "/api/users/me" : "/api/users";
+      const method = "PUT";
+      // const method = isUpdate ? "PUT" : "POST";
+      const endpoint = "/api/users/me";
 
       await fetchAPI(endpoint, { method, body: finalPayload, getToken });
       setSavedMessage("Profile saved successfully");
@@ -68,8 +70,37 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-4">Your Profile</h1>
+    <div className="max-w-5xl mx-auto px-4 py-8">
+      {/* Modern header */}
+      <div className="relative overflow-hidden rounded-2xl mb-6">
+        <div className="h-32 bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-400" />
+        <div className="absolute bottom-[8px] left-6 flex items-end gap-4">
+          <div className="w-20 h-20 rounded-xl ring-4 ring-white overflow-hidden shadow-lg">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={
+                clerkUser?.imageUrl || user?.profile?.avatarUrl || "/window.svg"
+              }
+              alt="Avatar"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="pb-2">
+            <h1 className="text-2xl font-bold text-gray-900">
+              {(user?.profile?.firstName ||
+                clerkUser?.firstName ||
+                "Your Profile") +
+                (user?.profile?.lastName || clerkUser?.lastName
+                  ? ` ${user?.profile?.lastName || clerkUser?.lastName}`
+                  : "")}
+            </h1>
+            <p className="text-sm text-gray-600">
+              {clerkUser?.primaryEmailAddress?.emailAddress ||
+                "Complete your profile to get started"}
+            </p>
+          </div>
+        </div>
+      </div>
 
       <SignedOut>
         <div className="rounded-md bg-yellow-50 p-4 mb-4 text-sm text-yellow-800">
@@ -96,19 +127,34 @@ export default function ProfilePage() {
                 {savedMessage}
               </div>
             )}
-            <ProfileForm
-              initialValues={{
-                ...user?.profile,
-                userType: user?.userType || "",
-                languages: Array.isArray(user?.profile?.languages)
-                  ? user.profile.languages
-                  : String(user?.profile?.languages || "")
-                      .split(",")
-                      .map((s) => s.trim())
-                      .filter(Boolean),
-              }}
-              onSubmit={handleSubmit}
-            />
+            <div className="bg-white shadow-sm ring-1 ring-gray-200 rounded-2xl p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h2 className="text-lg font-semibold">
+                    Complete your profile
+                  </h2>
+                  <p className="text-sm text-gray-600">
+                    Tell us about yourself to get better matches.
+                  </p>
+                </div>
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 ring-1 ring-blue-200">
+                  Profile
+                </span>
+              </div>
+              <ProfileForm
+                initialValues={{
+                  ...user?.profile,
+                  userType: user?.userType || "",
+                  languages: Array.isArray(user?.profile?.languages)
+                    ? user.profile.languages
+                    : String(user?.profile?.languages || "")
+                        .split(",")
+                        .map((s) => s.trim())
+                        .filter(Boolean),
+                }}
+                onSubmit={handleSubmit}
+              />
+            </div>
           </>
         )}
       </SignedIn>
