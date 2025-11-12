@@ -1,9 +1,11 @@
+import Link from "next/link";
+
 export default function JobCard({ job }) {
   return (
     <div className="card hover:shadow-lg transition-shadow duration-300">
       <div className="flex items-start justify-between mb-4">
         <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
-          <span className="font-bold text-gray-600 text-sm">{job.company.charAt(0)}</span>
+          <span className="font-bold text-gray-600 text-sm">{(job.company || "").charAt(0)}</span>
         </div>
         <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">
           {job.type}
@@ -25,14 +27,14 @@ export default function JobCard({ job }) {
         <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
         </svg>
-        {job.salary}
+        {job.salary || ""}
       </div>
       
       <div className="flex justify-between items-center">
         <span className="text-gray-400 text-sm">{job.posted}</span>
-        <button className="text-blue-600 hover:text-blue-700 font-medium text-sm">
-          Apply Now
-        </button>
+        <Link href={`/jobs/${job.id}`} className="text-blue-600 hover:text-blue-700 font-medium text-sm" prefetch={false}>
+          View
+        </Link>
       </div>
     </div>
   );

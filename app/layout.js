@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ToastProvider } from "@/components/Toast";
 
 // export const metadata = {
 //   title: "LeapTalent - Find Your Dream Job",
@@ -14,9 +15,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body suppressHydrationWarning={true}>
         <ClerkProvider>
-          <Header />
-          <main className="min-h-screen">{children}</main>
-          <Footer />
+          <ToastProvider>
+            <Header />
+            <main className="min-h-screen">{children}</main>
+            <Footer />
+          </ToastProvider>
         </ClerkProvider>
       </body>
     </html>

@@ -1,14 +1,13 @@
 "use client";
 
 import { Suspense } from "react";
-import JobList from "@/components/JobList";
+import JobDetail from "@/components/JobDetail";
 
-export default function JobsPage() {
+export default function JobDetailPage() {
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-2xl font-semibold mb-6">Browse Jobs</h1>
       <Suspense fallback={<div className="h-64 animate-pulse bg-gray-100 rounded" />}> 
-        <JobList />
+        <JobDetail />
       </Suspense>
     </div>
   );
