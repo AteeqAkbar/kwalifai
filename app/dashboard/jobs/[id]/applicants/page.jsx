@@ -22,7 +22,8 @@ function Content() {
   const { data, error, isLoading } = useSWR(
     id ? ["apps", id] : null,
     async () => {
-      const token = await getToken({ template: "default" });
+      const token = await getToken();
+      if (!token) throw new Error("Missing auth token. Please sign in again.");
       const res = await fetch(`/api/jobs/${id}/applications`, {
         headers: { Authorization: `Bearer ${token}` },
       });

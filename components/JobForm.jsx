@@ -59,7 +59,8 @@ export default function JobForm({ job, mode = "create" }) {
       return;
     }
     try {
-      const token = await getToken({ template: "default" });
+      const token = await getToken();
+      if (!token) throw new Error("Missing auth token. Please sign in again.");
       const payload = {
         ...form,
         salaryRangeMin: form.salaryRangeMin ? Number(form.salaryRangeMin) : undefined,

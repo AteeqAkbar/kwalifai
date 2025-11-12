@@ -21,7 +21,8 @@ function Content() {
   const { data, error, mutate, isLoading } = useSWR(
     isSignedIn ? ["my-jobs"] : null,
     async () => {
-      const token = await getToken({ template: "default" });
+      const token = await getToken();
+      if (!token) throw new Error("Missing auth token. Please sign in again.");
       const res = await fetch("/api/jobs/employer/my-jobs?page=1&limit=20", {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -33,7 +34,8 @@ function Content() {
 
   async function closeJob(id) {
     try {
-      const token = await getToken({ template: "default" });
+      const token = await getToken();
+      if (!token) throw new Error("Missing auth token. Please sign in again.");
       const res = await fetch(`/api/jobs/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
