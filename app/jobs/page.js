@@ -1,134 +1,97 @@
-import JobCard from '@/components/JobCard';
-
-// Mock jobs data
-const jobs = [
-  {
-    id: 1,
-    title: 'Senior Frontend Developer',
-    company: 'TechCorp',
-    location: 'San Francisco, CA',
-    type: 'Full-time',
-    salary: '$120,000 - $150,000',
-    posted: '2 days ago',
-    logo: '/techcorp-logo.png'
-  },
-  {
-    id: 2,
-    title: 'Product Manager',
-    company: 'InnovateInc',
-    location: 'Remote',
-    type: 'Full-time',
-    salary: '$110,000 - $140,000',
-    posted: '1 week ago',
-    logo: '/innovateinc-logo.png'
-  },
-  {
-    id: 3,
-    title: 'UX Designer',
-    company: 'DesignStudio',
-    location: 'New York, NY',
-    type: 'Contract',
-    salary: '$90,000 - $120,000',
-    posted: '3 days ago',
-    logo: '/designstudio-logo.png'
-  },
-  {
-    id: 4,
-    title: 'Backend Engineer',
-    company: 'DataSystems',
-    location: 'Austin, TX',
-    type: 'Full-time',
-    salary: '$130,000 - $160,000',
-    posted: '5 days ago',
-    logo: '/datasystems-logo.png'
-  },
-  {
-    id: 5,
-    title: 'DevOps Specialist',
-    company: 'CloudTech',
-    location: 'Remote',
-    type: 'Full-time',
-    salary: '$115,000 - $145,000',
-    posted: '1 day ago',
-    logo: '/cloudtech-logo.png'
-  },
-  {
-    id: 6,
-    title: 'Mobile Developer',
-    company: 'AppWorks',
-    location: 'Seattle, WA',
-    type: 'Contract',
-    salary: '$100,000 - $130,000',
-    posted: '4 days ago',
-    logo: '/appworks-logo.png'
-  }
-];
+// app/jobs/page.js
+"use client";
+import { useState } from "react";
+import { useJobs } from "@/hooks/useJobs";
+import JobCard from "@/components/jobs/JobCard";
+import JobFilters from "@/components/jobs/JobFilters";
 
 export default function JobsPage() {
+  const [filters, setFilters] = useState({
+    page: 1,
+    limit: 12,
+  });
+
+  const { data, loading, error } = useJobs(filters);
+  console.log(data, "daya");
+
+  const handleFiltersChange = (newFilters) => {
+    setFilters((prev) => ({ ...prev, ...newFilters, page: 1 }));
+  };
+
+  const handlePageChange = (newPage) => {
+    setFilters((prev) => ({ ...prev, page: newPage }));
+  };
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="container mx-auto px-4">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            Error loading jobs: {error}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+      <div className="container mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Find Your Dream Job</h1>
-          <p className="text-gray-600">Discover opportunities that match your skills and aspirations</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Find Your Dream Job
+          </h1>
+          <p className="text-gray-600">
+            Discover opportunities that match your skills and interests
+          </p>
         </div>
 
-        {/* Search and Filters */}
-        <div className="card mb-8">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1">
-              <input
-                type="text"
-                placeholder="Job title, keywords, or company"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div className="flex-1">
-              <input
-                type="text"
-                placeholder="Location"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <button className="btn-primary whitespace-nowrap">
-              Search Jobs
-            </button>
+        <JobFilters onFiltersChange={handleFiltersChange} />
+
+        {loading ? (
+          <div className="flex justify-center items-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
           </div>
-          
-          {/* Filter chips */}
-          <div className="flex flex-wrap gap-2 mt-4">
-            <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
-              Full-time
-            </span>
-            <span className="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded-full">
-              Remote
-            </span>
-            <span className="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded-full">
-              Engineering
-            </span>
-            <span className="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded-full">
-              Design
-            </span>
-            <span className="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded-full">
-              Product
-            </span>
+        ) : data && data.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+              {data.map((job) => (
+                <JobCard key={job.id} job={job} />
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {data.pages > 1 && (
+              <div className="flex justify-center items-center space-x-2 mt-8">
+                <button
+                  onClick={() => handlePageChange(data.currentPage - 1)}
+                  disabled={data.currentPage <= 1}
+                  className="px-3 py-2 text-sm bg-white border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50"
+                >
+                  Previous
+                </button>
+
+                <span className="text-sm text-gray-700">
+                  Page {data.currentPage} of {data.pages}
+                </span>
+
+                <button
+                  onClick={() => handlePageChange(data.currentPage + 1)}
+                  disabled={data.currentPage >= data.pages}
+                  className="px-3 py-2 text-sm bg-white border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">
+              No jobs found matching your criteria.
+            </p>
           </div>
-        </div>
-
-        {/* Jobs Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {jobs.map(job => (
-            <JobCard key={job.id} job={job} />
-          ))}
-        </div>
-
-        {/* Load More */}
-        <div className="text-center mt-8">
-          <button className="btn-secondary">
-            Load More Jobs
-          </button>
-        </div>
+        )}
       </div>
     </div>
   );
