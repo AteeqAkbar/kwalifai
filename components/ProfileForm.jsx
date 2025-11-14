@@ -652,6 +652,28 @@ export default function ProfileForm({ initialValues = {}, onSubmit }) {
             )}
           </div>
           <div>
+            <label className="block text-sm font-medium">Phone</label>
+            <input
+              className="mt-1 w-full border rounded p-2"
+              value={values.phone}
+              placeholder="eg: 3123456789"
+              onChange={(e) => setField("phone", e.target.value)}
+            />
+            {errors.phone && (
+              <p className="mt-1 text-xs text-red-600">{errors.phone}</p>
+            )}
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          {/* <div>
+            <label className="block text-sm font-medium">Timezone</label>
+            <input
+              className="mt-1 w-full border rounded p-2"
+              value={values.timezone}
+              onChange={(e) => setField("timezone", e.target.value)}
+            />
+          </div> */}
+          {/* <div>
             <label className="block text-sm font-medium">
               Languages (comma-separated)
             </label>
@@ -668,28 +690,7 @@ export default function ProfileForm({ initialValues = {}, onSubmit }) {
                 )
               }
             />
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          <div>
-            <label className="block text-sm font-medium">Timezone</label>
-            <input
-              className="mt-1 w-full border rounded p-2"
-              value={values.timezone}
-              onChange={(e) => setField("timezone", e.target.value)}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium">Phone</label>
-            <input
-              className="mt-1 w-full border rounded p-2"
-              value={values.phone}
-              onChange={(e) => setField("phone", e.target.value)}
-            />
-            {errors.phone && (
-              <p className="mt-1 text-xs text-red-600">{errors.phone}</p>
-            )}
-          </div>
+          </div> */}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <div>

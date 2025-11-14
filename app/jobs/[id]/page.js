@@ -73,7 +73,7 @@ export default function JobDetailPage() {
                   )}
                 </div>
               </div>
-              {job.applicationUrl && (
+              {/* {job.applicationUrl && (
                 <a
                   href={job.applicationUrl}
                   target="_blank"
@@ -82,7 +82,7 @@ export default function JobDetailPage() {
                 >
                   Apply Now
                 </a>
-              )}
+              )} */}
             </div>
           </div>
 
@@ -155,21 +155,21 @@ export default function JobDetailPage() {
                 </div>
 
                 {/* Tech Stack */}
-                {job.techStack && job.techStack.length > 0 && (
+                {/* {job.techStack && job.techStack.length > 0 && (
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <h3 className="font-semibold mb-2">Tech Stack</h3>
                     <div className="flex flex-wrap gap-1">
-                      {/* {job.techStack.map((tech, index) => (
+                      {job.techStack.map((tech, index) => (
                         <span
                           key={index}
                           className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded"
                         >
                           {tech}
                         </span>
-                      ))} */}
+                      ))}
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
           </div>

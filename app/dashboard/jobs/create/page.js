@@ -17,7 +17,7 @@ export default function CreateJobPage() {
     salaryRangeMin: "",
     salaryRangeMax: "",
     location: "",
-    applicationUrl: "",
+    applicationUrl: "https://kwalifai.vercel.app/",
     applicationDeadline: "",
     techStack: "",
     benefits: "",
@@ -291,26 +291,26 @@ export default function CreateJobPage() {
               </div>
             </div>
 
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="applicationUrl"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Application URL
-              </label>
-              <div className="mt-2">
-                <input
-                  type="url"
-                  name="applicationUrl"
-                  id="applicationUrl"
-                  value={formData.applicationUrl}
-                  onChange={handleChange}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
+            {/* <div className="sm:col-span-3">
+                <label
+                  htmlFor="applicationUrl"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Application URL
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="url"
+                    name="applicationUrl"
+                    id="applicationUrl"
+                    value={formData.applicationUrl}
+                    onChange={handleChange}
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div> */}
 
-            <div className="sm:col-span-3">
+            {/* <div className="sm:col-span-3">
               <label
                 htmlFor="techStack"
                 className="block text-sm font-medium leading-6 text-gray-900"
@@ -327,7 +327,7 @@ export default function CreateJobPage() {
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                 />
               </div>
-            </div>
+            </div> */}
 
             <div className="sm:col-span-6">
               <label
