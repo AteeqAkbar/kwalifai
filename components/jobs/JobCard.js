@@ -24,15 +24,15 @@ export default function JobCard({ job }) {
       <div className="flex justify-between items-start mb-3">
         <h3 className="text-xl font-semibold text-gray-900">
           <Link href={`/jobs/${job.id}`} className="hover:text-blue-600">
-            {job.title}
+            {job?.title}
           </Link>
         </h3>
         <span
           className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
-            job.status
+            job?.status
           )}`}
         >
-          {job.status}
+          {job?.status}
         </span>
       </div>
 
@@ -41,28 +41,28 @@ export default function JobCard({ job }) {
           {job.jobType?.replace("_", " ")}
         </span>
         <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">
-          {job.workMode}
+          {job?.workMode}
         </span>
         <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">
-          {job.experienceLevel}
+          {job?.experienceLevel}
         </span>
         {job.location && (
           <span className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">
-            {job.location}
+            {job?.location}
           </span>
         )}
       </div>
 
       <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-        {job.description}
+        {job?.description}
       </p>
 
       <div className="flex justify-between items-center">
         <div className="text-sm text-gray-500">
-          {formatSalary(job.salaryRangeMin, job.salaryRangeMax)}
+          {formatSalary(job?.salaryRangeMin, job?.salaryRangeMax)}
         </div>
         <div className="text-xs text-gray-400">
-          Posted {new Date(job.postedDate).toLocaleDateString()}
+          Posted {new Date(job?.postedDate).toLocaleDateString()}
         </div>
       </div>
     </div>
