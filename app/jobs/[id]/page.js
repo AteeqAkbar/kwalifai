@@ -3,12 +3,21 @@
 import { useParams } from "next/navigation";
 import { useJobs } from "@/hooks/useJobs";
 import Link from "next/link";
+import { useState } from "react";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+import { useApplicationMutations } from "@/hooks/useApplications";
 
 export default function JobDetailPage() {
   const params = useParams();
   const { data: jobs, loading, error } = useJobs(params.id);
-  const job = jobs?.[0];
-  console.log(jobs, "job");
+  const job1 = jobs?.filter((job) => job.id == params.id);
+  const job = job1?.length ? job1?.[0] : job1;
+  console.log(job, "job");
+  const { applyToJob, loading: applying } = useApplicationMutations();
+  const [resumeUrl, setResumeUrl] = useState("");
+  const [coverLetter, setCoverLetter] = useState("");
+  const [applyError, setApplyError] = useState(null);
+  const [applySuccess, setApplySuccess] = useState("");
 
   if (loading) {
     return (
@@ -73,16 +82,17 @@ export default function JobDetailPage() {
                   )}
                 </div>
               </div>
-              {/* {job.applicationUrl && (
-                <a
-                  href={job.applicationUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-                >
-                  Apply Now
-                </a>
-              )} */}
+              {/* Apply CTA (internal applications) */}
+              <SignedIn>
+                <div className="flex items-center gap-3">
+                  <a
+                    href="#apply"
+                    className="bg-white text-blue-700 px-5 py-2.5 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+                  >
+                    Apply Now
+                  </a>
+                </div>
+              </SignedIn>
             </div>
           </div>
 
@@ -152,6 +162,93 @@ export default function JobDetailPage() {
                   <p className="text-gray-700">
                     {new Date(job.postedDate).toLocaleDateString()}
                   </p>
+                </div>
+
+                {/* Apply Panel */}
+                <div id="apply" className="bg-gray-50 p-4 rounded-lg">
+                  <h3 className="font-semibold mb-2">Apply to this job</h3>
+                  {applyError && (
+                    <div className="text-sm text-red-700 bg-red-50 rounded p-2 mb-2">
+                      {applyError}
+                    </div>
+                  )}
+                  {applySuccess && (
+                    <div className="text-sm text-green-700 bg-green-50 rounded p-2 mb-2">
+                      {applySuccess}
+                    </div>
+                  )}
+                  <SignedOut>
+                    <p className="text-sm text-gray-600 mb-2">
+                      Please sign in to apply.
+                    </p>
+                    <SignInButton mode="modal">
+                      <button className="px-4 py-2 rounded bg-blue-600 text-white">
+                        Sign In
+                      </button>
+                    </SignInButton>
+                  </SignedOut>
+                  <SignedIn>
+                    <form
+                      onSubmit={async (e) => {
+                        e.preventDefault();
+                        setApplyError(null);
+                        setApplySuccess("");
+                        try {
+                          await applyToJob({
+                            jobListingId: job.id,
+                            resumeUrl: resumeUrl || undefined,
+                            coverLetter: coverLetter || undefined,
+                            metadata: undefined,
+                          });
+                          setApplySuccess("Application submitted successfully");
+                          setResumeUrl("");
+                          setCoverLetter("");
+                        } catch (err) {
+                          setApplyError(
+                            err?.message || "Failed to submit application"
+                          );
+                        }
+                      }}
+                      className="space-y-3"
+                    >
+                      <div>
+                        <label className="block text-sm font-medium text-gray-900">
+                          Resume URL (optional)
+                        </label>
+                        <input
+                          type="url"
+                          value={resumeUrl}
+                          onChange={(e) => setResumeUrl(e.target.value)}
+                          placeholder="https://..."
+                          className="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-900">
+                          Cover Letter (optional)
+                        </label>
+                        <textarea
+                          value={coverLetter}
+                          onChange={(e) =>
+                            setCoverLetter(e.target.value.slice(0, 5000))
+                          }
+                          rows={4}
+                          placeholder="Write a brief cover letter..."
+                          className="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Max 5000 characters.
+                        </p>
+                      </div>
+                      <button
+                        type="submit"
+                        disabled={applying}
+                        className="w-full px-4 py-2 rounded bg-blue-600 text-white disabled:opacity-50"
+                      >
+                        {applying ? "Submitting…" : "Submit Application"}
+                      </button>
+                    </form>
+                  </SignedIn>
                 </div>
 
                 {/* Tech Stack */}

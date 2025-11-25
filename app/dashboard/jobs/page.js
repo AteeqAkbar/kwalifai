@@ -96,6 +96,12 @@ export default function EmployerJobsPage() {
                       View
                     </Link>
                     <Link
+                      href={`/dashboard/jobs/${job.id}/applications`}
+                      className="px-3 py-1 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50"
+                    >
+                      Applicants
+                    </Link>
+                    <Link
                       href={`/dashboard/jobs/${job.id}/edit`}
                       className="px-3 py-1 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50"
                     >

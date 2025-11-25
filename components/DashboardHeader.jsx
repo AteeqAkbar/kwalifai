@@ -32,14 +32,26 @@ export default function DashboardHeader() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const navigation =
-    user?.userType == "both" || user?.userType == "employer"
-      ? [
-          { name: "Profile", href: "/dashboard/profile", icon: "👤" },
-          { name: "My Jobs", href: "/dashboard/jobs", icon: "💼" },
-          { name: "Create Job", href: "/dashboard/jobs/create", icon: "✨" },
-        ]
-      : [{ name: "Profile", href: "/dashboard/profile", icon: "👤" }];
+  let navigation = [{ name: "Profile", href: "/dashboard/profile", icon: "👤" }];
+  if (user?.userType === "job_seeker") {
+    navigation = [
+      { name: "Profile", href: "/dashboard/profile", icon: "👤" },
+      { name: "Applications", href: "/dashboard/applications", icon: "📄" },
+    ];
+  } else if (user?.userType === "employer") {
+    navigation = [
+      { name: "Profile", href: "/dashboard/profile", icon: "👤" },
+      { name: "My Jobs", href: "/dashboard/jobs", icon: "💼" },
+      { name: "Create Job", href: "/dashboard/jobs/create", icon: "✨" },
+    ];
+  } else if (user?.userType === "both") {
+    navigation = [
+      { name: "Profile", href: "/dashboard/profile", icon: "👤" },
+      { name: "Applications", href: "/dashboard/applications", icon: "📄" },
+      { name: "My Jobs", href: "/dashboard/jobs", icon: "💼" },
+      { name: "Create Job", href: "/dashboard/jobs/create", icon: "✨" },
+    ];
+  }
 
   const isActive = (path) => {
     if (path === "/dashboard") {
